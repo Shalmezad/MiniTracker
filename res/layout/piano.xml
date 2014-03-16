@@ -105,7 +105,7 @@
         <View android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/key_cs"
+            android:id="@+id/key_fs"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_weight="1"
@@ -115,7 +115,7 @@
             android:textColor="@color/white" />
 
         <TextView
-            android:id="@+id/key_cs"
+            android:id="@+id/key_gs"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_weight="1"
@@ -125,7 +125,7 @@
             android:textColor="@color/white" />
 
         <TextView
-            android:id="@+id/key_cs"
+            android:id="@+id/key_as"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:layout_weight="1"
