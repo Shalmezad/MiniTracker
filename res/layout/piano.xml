@@ -80,7 +80,10 @@
         android:layout_height="90dp"
         android:orientation="horizontal" >
 
-        <View android:layout_weight="1" />
+        <View 
+            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/key_cs"
@@ -102,7 +105,10 @@
             android:text="D#/Eb"
             android:textColor="@color/white" />
 
-        <View android:layout_weight="1" />
+        <View 
+            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/key_fs"
@@ -134,7 +140,10 @@
             android:text="A#/Bb"
             android:textColor="@color/white" />
 
-        <View android:layout_weight="1" />
+        <View 
+            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
     </LinearLayout>
 
 </RelativeLayout>
