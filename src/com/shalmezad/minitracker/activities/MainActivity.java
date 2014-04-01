@@ -4,6 +4,7 @@ import com.shalmezad.minitracker.R;
 import com.shalmezad.minitracker.music.Note;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -16,7 +17,7 @@ import android.media.AudioTrack;
 public class MainActivity extends Activity
 {
 	private final int STREAM_TYPE = AudioManager.STREAM_MUSIC;
-	private final int SAMPLE_RATE_IN_HZ=14000;
+	private final int SAMPLE_RATE_IN_HZ=11025;
 	private final int CHANNEL_CONFIG= AudioFormat.CHANNEL_OUT_MONO;
 	private final int AUDIO_FORMAT = AudioFormat.ENCODING_PCM_8BIT;
 	private final int BUFFER_SIZE_IN_BYTES = 1000;
@@ -63,8 +64,8 @@ public class MainActivity extends Activity
 			this.key = key;
 		}
 		@Override
-		public boolean onTouch(View arg0, MotionEvent event) {
-			//TODO: Do something on click. Don't know what yet...
+		public boolean onTouch(View arg0, MotionEvent event) 
+		{
 			switch(event.getAction())
 			{
 			case MotionEvent.ACTION_DOWN:
@@ -75,6 +76,7 @@ public class MainActivity extends Activity
 				break;
 			case MotionEvent.ACTION_UP:
 				Log.i("PianoKeyListener", "Stopping note");
+				mAudioPlay.pause();
 				mAudioPlay.stop();
 				break;
 			}
@@ -126,22 +128,36 @@ public class MainActivity extends Activity
 		
 		//We're going to work with square waves for now (how original...)
 		//So, high 1/2, low 1/2, 
-		float waveLengthSamples = SAMPLE_RATE_IN_HZ/frequency;
+		float waveLength = 1000.0f/frequency;
 		//This will be in the ammount of samples
 		byte[] samples = new byte[BUFFER_SIZE_IN_BYTES];
 		for(int i=0; i<BUFFER_SIZE_IN_BYTES; i++)
 		{
-			if(Math.floor(i/waveLengthSamples/2.0)%2 == 0)
-			{
-				samples[i] = 0;
-			}
-			else
-			{
-				samples[i] = (byte) 255;
-			}
+			//http://nathanbelue.blogspot.com/2013/01/playing-pitch-in-android-app-with.html
+	       double t = (double)i * (1.0/SAMPLE_RATE_IN_HZ);
+	       double f = Math.sin( t * 2*Math.PI * frequency );
+	       if( f > 0 )
+	       {
+	    	   samples[i] = (byte) 255;
+	       }
+	       else
+	       {
+	    	   samples[i] = (byte)0;
+	       }
+	       //samples[i] = (byte)(f * 127);
+		}
+
+		int x = (int)( (double)BUFFER_SIZE_IN_BYTES * frequency / SAMPLE_RATE_IN_HZ ); // added
+		int mSampleCount = (int)( (double)x * SAMPLE_RATE_IN_HZ / frequency ); // added
+		float end = BUFFER_SIZE_IN_BYTES;
+		if(mAudioPlay.getPlayState() == AudioTrack.PLAYSTATE_PLAYING)
+		{
+			mAudioPlay.stop();
 		}
 		mAudioPlay.write(samples, 0, BUFFER_SIZE_IN_BYTES);
-		mAudioPlay.setLoopPoints(0, (int) waveLengthSamples, -1);
+		mAudioPlay.reloadStaticData();
+		mAudioPlay.setLoopPoints(0, mSampleCount, -1);
 		mAudioPlay.play();
 	}
+	
 }
