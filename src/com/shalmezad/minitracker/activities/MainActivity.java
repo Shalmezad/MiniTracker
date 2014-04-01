@@ -80,7 +80,7 @@ public class MainActivity extends Activity
 				mAudioPlay.stop();
 				break;
 			}
-			return false;
+			return true;
 		}
 		
 	}
